@@ -1,0 +1,83 @@
+.card {
+  min-height: 10rem;
+  border-radius: 2rem;
+  width: 40%;
+  border: black 2px solid;
+  padding: 1rem;
+  background-color: rgb(9 7 9 / 90%);
+  color: rgb(246, 229, 229);
+  -webkit-box-shadow: 24px -17px 49px -10px rgba(107, 80, 46, 1);
+  -moz-box-shadow: 24px -17px 49px -10px rgba(107, 80, 46, 1);
+  box-shadow: 24px -17px 49px -10px rgba(107, 80, 46, 1);
+}
+
+.card-title {
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+  font-size: 2.5rem;
+  margin-top: 0;
+}
+
+.card-details {
+  display: flex;
+  gap: 1rem;
+}
+
+.card-image {
+  border-radius: 2rem;
+  left: 0;
+  background-color: rgb(119, 39, 39);
+}
+
+.card-location {
+  display: flex;
+  align-self: center;
+  gap: 1rem;
+}
+
+.map-icon {
+  height: 2.5rem;
+  width: 2rem;
+}
+
+.stree-address {
+  align-self: center;
+  font-size: 0.8rem;
+}
+
+.place-rating {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 1.5rem;
+}
+
+@media (max-width: 1296px) {
+  .card-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 850px) {
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .card-title {
+    font-size: 1.5rem;
+  }
+
+  .card-image {
+    height: 40px;
+    width: 40px;
+  }
+
+  .map-icon {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+}
