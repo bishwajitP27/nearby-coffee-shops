@@ -10,13 +10,12 @@ import Card from "../card/Card";
 export default function Places() {
   const { places, isFetching, error } = useContext(PlacesContext);
   const [pageNumber, setPageNumber] = useState(0);
-  const [loading, setLoading] = useState(false);
   const [showPlaces, setShowPlaces] = useState([]);
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
   const pageEnd = useRef(null);
 
   const loadMore = () => {
     setPageNumber((pageNumber) => pageNumber + 1);
-    setLoading(true);
   };
 
   useEffect(() => {
@@ -27,30 +26,32 @@ export default function Places() {
         const startIndex = 0;
         const endIndex = pageNumber * 10 + 10;
         setShowPlaces(places.slice(startIndex, endIndex));
-        setLoading(true);
+        !isPageLoaded && setIsPageLoaded(true);
       }, 500);
     }
 
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [pageNumber, places, loading]);
+  }, [pageNumber, places]);
 
   useEffect(() => {
-    if (loading) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting) loadMore();
-        },
-        { threshold: 1 }
-      );
-      pageEnd.current && observer.observe(pageEnd.current);
-    }
-  }, [loading]);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) loadMore();
+      },
+      { threshold: 1 }
+    );
+    pageEnd.current && observer.observe(pageEnd.current);
+
+    return () => {
+      pageEnd.current && observer.unobserve(pageEnd.current);
+    };
+  }, [pageEnd.current]);
 
   if (error.isError) return <h1 className="no-place-data">{error.message}</h1>;
 
-  if (isFetching || !loading)
+  if (isFetching || !isPageLoaded)
     return (
       <div className="no-place-data">
         <CircularProgress style={{ color: "white" }} color="success" size="8rem" />
@@ -71,7 +72,7 @@ export default function Places() {
           </div>
         );
       })}
-      <div ref={pageEnd} onClick={loadMore}>
+      <div ref={pageEnd}>
         {showPlaces.length > 0 && showPlaces.length !== places.length && (
           <div>
             <CircularProgress style={{ color: "white" }} color="success" size="2rem" />
